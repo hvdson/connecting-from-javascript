@@ -54,17 +54,17 @@ function showDb (helperFntn) {
   });
 }
 
-knex("famous_people")
+return knex("famous_people")
   .insert({first_name: firstName, last_name: lastName, birthdate: insertBirthDate})
   .whereNotExists( () => {
     this.select('*').from("famous_people").where('last_name', lastName);
   })
-  .asCallback( (err, rows) => {
-    if (err) {
-      throw err;
-    }
-    // showDb(displayResults);
-  });
+  // .asCallback( (err, rows) => {
+  //   if (err) {
+  //     throw err;
+  //   }
+  //   // showDb(displayResults);
+  // });
 
 knex.destroy();
 
