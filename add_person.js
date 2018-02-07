@@ -1,9 +1,11 @@
 const pg = require("pg");
 const settings = require("./settings");
+
 const values = process.argv.slice(2);
 const firstName = values[0];
 const lastName = values[1];
 const birthDate = values[2];
+
 const parts = birthDate.split('-');
 const insertBirthDate = new Date(parts[0], parts[1] - 1, parts[2]);
 
@@ -56,13 +58,13 @@ knex("famous_people")
   .insert({first_name: firstName, last_name: lastName, birthdate: insertBirthDate})
   .whereNotExists( () => {
     this.select('*').from("famous_people").where('last_name', lastName);
+  })
+  .asCallback( (err, rows) => {
+    if (err) {
+      throw err;
+    }
+    // showDb(displayResults);
   });
-  // .asCallback( (err, rows) => {
-  //   if (err) {
-  //     throw err;
-  //   }
-  //   showDb(displayResults);
-  // });
 
 knex.destroy();
 
